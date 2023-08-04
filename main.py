@@ -1,6 +1,6 @@
 import pygame, sys
 from game_code.game import Game
-from game_code.constants import *
+from game_code.utils.constants import *
 
 
 class TeaTime:
