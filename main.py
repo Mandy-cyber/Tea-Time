@@ -1,6 +1,6 @@
 import pygame, sys
 from game_code.game import Game
-from game_code.utils.constants import *
+from game_code.constants import *
 
 
 class TeaTime:
@@ -19,7 +19,7 @@ class TeaTime:
 					sys.exit()
 
 			dt = self.clock.tick() / 1000
-			self.level.run(dt)
+			self.game.run(dt)
 			pygame.display.update()
 
 
