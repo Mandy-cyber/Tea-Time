@@ -1,5 +1,5 @@
 from game_code.sprites.basic_sprite import BasicSprite
-from ..constants import *
+from game_code.constants import *
 
 class Water(BasicSprite):
     def __init__(self, pos, animation_frames, groups):
