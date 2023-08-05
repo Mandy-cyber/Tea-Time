@@ -67,7 +67,7 @@ LAYERS = {
     'small_plant': 5,
     'player': 6,
     'roof': 7,
-    'bush_plants': 8,
+    'bush_herbs': 8,
     'rain_drops': 9 
 }
 
@@ -85,7 +85,7 @@ HERB_PRICES = {
     'hibiscus': 75,
     'lavender': 40,
     'chamomile': 50,
-    'basil': 30,
+    'basil': 20,
 }
 
 # options for how many drops a herb can give
@@ -94,6 +94,21 @@ HERB_DROPS = {
     'lavender':  [1, 2, 3, 4],
     'chamomile': [1, 2, 3, 4, 5],
     'basil':     [1, 2, 3, 4, 5, 6]
+}
+
+# how much health the wild herb plants have
+WILD_HERBS = {
+    'HibiscusTree': 3,
+    'ChamomileBush': 4,
+    'Bush': 4,
+    'BasilBush': 5,
+}
+
+# where herbs can be placed on their plant
+WILD_HERBS_POS = {
+    'HibiscusTree': [(30, 40), (70, 70), (50, 80), (90, 30)],
+    'ChamomileBush': [(10, 10), (30, 30), (50, 10)],
+    'LavenderBush': [(10, 10), (30, 30), (50, 10)]
 }
 
 
