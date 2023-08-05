@@ -2,8 +2,9 @@ import pygame
 from game_code.constants import *
 from pytmx.util_pygame import load_pygame
 from game_code.camera import Camera
-from game_code.sprites.basic_sprite import Generic
+from game_code.sprites.basic_sprite import BasicSprite
 from game_code.player import Player
+from game_code.sprites.overlay import Overlay
 
 class Game:
 
@@ -18,6 +19,7 @@ class Game:
 
         # setup
         self.load_map()
+        self.overlayer = Overlay(self.player)
 
 
     def load_map(self):
@@ -27,7 +29,7 @@ class Game:
         
 
         # FOR NOW
-        # Generic(
+        # BasicSprite(
         #     pos = (0,0),
         #     surface = pygame.image.load('../game_map/map.png'),
         #     groups = self.all_sprites,
@@ -61,5 +63,7 @@ class Game:
         self.display_surface.fill('black')
         self.all_sprites.draw(self.display_surface)
         self.all_sprites.update(dt)
+
+        self.overlayer.display()
 
 

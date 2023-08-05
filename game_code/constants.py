@@ -45,9 +45,15 @@ TOOL_OFFSET = {
 }
 
 
-# TOOLS
+# OVERLAY
 #----------------------
-TOOLS = ['shear', 'hoe', 'watering_can']
+overlay_x = SCREEN_WIDTH - 25
+OVERLAY_IMG_SIZE = (64, 64)
+OVERLAYS = {
+    'tool': (overlay_x - 30, 90),
+    'herb': (overlay_x - 30, 165),
+    'item': (overlay_x - 30, 250)
+}
 
 
 # LAYERS
