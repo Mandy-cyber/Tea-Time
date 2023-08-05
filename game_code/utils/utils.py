@@ -18,7 +18,7 @@ class Utils:
         for _, __, image_files in walk(filepath):
             for image in image_files:
                 image_path = f"{filepath}/{image}"
-                image_surf = pygame.transform.scale(pygame.image.load(image_path).convert_alpha(), IMG_SIZE)
+                image_surf = pygame.image.load(image_path).convert_alpha()
                 image_surfs.append(image_surf)
 
         return image_surfs
@@ -35,7 +35,7 @@ class Utils:
         for _, __, image_files in walk(filepath):
             for image in image_files:
                 image_path = f"{filepath}/{image}"
-                image_surf = pygame.transform.scale(pygame.image.load(image_path).convert_alpha(), IMG_SIZE)
+                image_surf = pygame.image.load(image_path).convert_alpha()
                 image_name = image.split('0')[0]
                 image_dict[image_name] = image_surf
 

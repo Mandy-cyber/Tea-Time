@@ -2,10 +2,10 @@ from pygame.math import Vector2
 
 # GENERAL
 #----------------------
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 720
+SCREEN_WIDTH = 1024
+SCREEN_HEIGHT = 800
 TILESIZE = 64
-IMG_SIZE = (128,128)
+IMG_SIZE = (256,256)
 
 
 # SPEEDS
@@ -66,7 +66,7 @@ LAYERS = {
     'ground rain': 4,
     'small_plant': 5,
     'player': 6,
-    'roof': 7,
+    'buildings': 7,
     'bush_herbs': 8,
     'rain_drops': 9 
 }
@@ -108,7 +108,7 @@ WILD_HERBS = {
 WILD_HERBS_POS = {
     'HibiscusTree': [(30, 40), (70, 70), (50, 80), (90, 30)],
     'ChamomileBush': [(10, 10), (30, 30), (50, 10)],
-    'LavenderBush': [(10, 10), (30, 30), (50, 10)]
+    'Bush': [(10, 10), (30, 30), (50, 10)]
 }
 
 

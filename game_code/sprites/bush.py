@@ -9,7 +9,10 @@ class Bush(BasicSprite):
 
     def __init__(self, pos, surf, groups, name, update_inventory_func):
         super().__init__(pos, surf, groups)
+
         self.name = name
+        if self.name == 'FullBasil': self.name = 'BasilBush' # TODO clean this up when i find the bush named Fullbasil lol
+
         self.update_inventory = update_inventory_func
         self.alive = True
 
@@ -44,7 +47,7 @@ class Bush(BasicSprite):
         """gets the correct image for this tree/bush to have on it"""
         if self.name == 'ChamomileBush':
             herb = 'chamomile'
-        elif self.name == 'BasilBush':
+        elif self.name == 'BasilBush' or self.name == 'FullBasil':
             herb = 'basil'
         elif self.name == 'HibiscusTree':
             herb = 'hibiscus'

@@ -105,7 +105,9 @@ class Player(pygame.sprite.Sprite):
 
         for animation_name in self.animations.keys():
             animation_path = 'assets/images/player/' + animation_name
-            self.animations[animation_name] = Utils.folder_to_surf_list(animation_path)
+            image_surfs = Utils.folder_to_surf_list(animation_path)
+            scaled_image_surfs = [pygame.transform.scale(image, IMG_SIZE) for image in image_surfs]
+            self.animations[animation_name] = scaled_image_surfs
 
 
     def use_tool(self):
