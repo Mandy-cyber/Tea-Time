@@ -1,6 +1,7 @@
 import pygame
 from game_code.constants import *
 from game_code.utils.utils import Utils
+from game_code.utils.game_timer import GameTimer
 
 
 class Player(pygame.sprite.Sprite):
@@ -40,6 +41,58 @@ class Player(pygame.sprite.Sprite):
         self.herb_index = 0
         self.current_herb = self.herbs[self.herb_index]
 
+        # other items
+        self.items = ['glass_bottle', 'journal']
+        self.item_index = 0
+        self.current_item = self.items[self.item_index]
+
+        # timers
+        self.timers = {
+            'use_tool': GameTimer(300, self.use_tool),
+            'change_tool': GameTimer(200),
+            'use_herb': GameTimer(300, self.plant_herb),
+            'change_herb': GameTimer(200),
+            'use_item': GameTimer(300, self.use_item),
+            'change_item': GameTimer(200)
+        }
+
+        # currency (aka hearts)
+        self.hearts = 100
+
+        # inventories
+        self.full_inventory = {
+            'lavender': 0,
+            'chamomile': 0,
+            'hibiscus': 0,
+            'basil': 0,
+            'glass_bottle': 0,
+            'journal': 0,
+            'lavender_tea': 0,
+            'chamomile_tea': 0,
+            'hibiscus_tea': 0,
+            'basil_tea': 0
+        }
+
+        self.herb_inventory = {
+            'lavender': 0,
+            'chamomile': 0,
+            'hibiscus': 0,
+            'basil': 0
+        }
+
+        self.tea_inventory = {
+            'lavender_tea': 0,
+            'chamomile_tea': 0,
+            'hibiscus_tea': 0,
+            'basil_tea': 0
+        }
+
+        self.misc_inventory = {
+            'glass_bottle': 0,
+            'journal': 0
+        }
+
+
 
     def load_assets(self):
         self.animations = {
@@ -53,6 +106,18 @@ class Player(pygame.sprite.Sprite):
         for animation_name in self.animations.keys():
             animation_path = 'assets/images/player/' + animation_name
             self.animations[animation_name] = Utils.folder_to_surf_list(animation_path)
+
+
+    def use_tool(self):
+        pass
+
+
+    def plant_herb(self):
+        pass
+
+
+    def use_item(self):
+        pass
 
 
     def input(self):
@@ -81,11 +146,59 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 0
 
 
+        # TOOL INPUT
+        #----------------------
+        # change tool
+        if keys[pygame.K_t]:
+            self.timers['change_tool'].activate()
+            self.change_tool()
+
+        
+        # HERB INPUT
+        #----------------------
+        # change herb
+        if keys[pygame.K_q]:
+            self.timers['change_herb'].activate()
+            self.change_herb()
+
+        
+        # ITEM INPUT (e.g. bottle)
+        #--------------------------
+        if keys[pygame.K_l]:
+            self.timers['change_item'].activate()
+            self.change_item()
+
+
+
+    def change_tool(self):
+        self.tool_index += 1
+        self.tool_index = self.tool_index if self.tool_index < len(self.tools) else 0
+        self.current_tool = self.tools[self.tool_index]
+
+    
+    def change_herb(self):
+        self.herb_index += 1
+        self.herb_index = self.herb_index if self.herb_index < len(self.herbs) else 0
+        self.current_herb = self.herbs[self.herb_index]
+
+    
+    def change_item(self):
+        self.item_index += 1
+        self.item_index = self.item_index if self.item_index < len(self.items) else 0
+        self.current_item = self.items[self.item_index]
+
+
     def animate(self, dt):
         self.state_index += 4 * dt
 
         if self.state_index >= len(self.animations[self.player_state]): self.state_index = 0
         self.image = self.animations[self.player_state][int(self.state_index)]
+
+
+    def change_player_state(self):
+        # stationary (i.e. idle)
+        if self.direction.magnitude() == 0:
+            self.player_state = self.player_state.split('_')[0] + '_idle'
 
 
     def move(self, dt):
@@ -108,5 +221,6 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, dt):
         self.input()
+        self.change_player_state()
         self.move(dt)
         self.animate(dt)
