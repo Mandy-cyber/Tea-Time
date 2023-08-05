@@ -1,6 +1,7 @@
 from game_code.sprites.basic_sprite import BasicSprite
 from game_code.constants import *
 
+
 class Water(BasicSprite):
     def __init__(self, pos, animation_frames, groups):
         self.frames = animation_frames
@@ -16,3 +17,12 @@ class Water(BasicSprite):
     
     def update(self, dt):
         self.animate(dt)
+
+
+
+class WaterTile(pygame.sprite.Sprite):
+    def __init__(self, pos, surf, groups):
+        super().__init__(groups)
+        self.image = surf
+        self.rect = self.image.get_rect(topleft = pos)
+        self.z = LAYERS['water_patch']
