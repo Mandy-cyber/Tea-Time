@@ -7,6 +7,7 @@ SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 800
 TILESIZE = 64
 IMG_SIZE = (64,64)
+DROP_SIZE = (32, 32)
 
 
 
@@ -118,9 +119,9 @@ WILD_HERBS = {
 
 # where herbs can be placed on their plant
 WILD_HERBS_POS = {
-    'HibiscusTree': [(30, 40), (70, 70), (50, 80), (90, 30)],
-    'ChamomileBush': [(10, 10), (30, 30), (50, 10)],
-    'LavenderBush': [(10, 10), (30, 30), (50, 10)]
+    'HibiscusTree': [(50, 30), (30, 20), (20, 10), (40, 30)],
+    'ChamomileBush': [(30, 0), (30, 0), (50, 0)],
+    'LavenderBush': [(10, 1), (30, 9), (50, 5)]
 }
 
 

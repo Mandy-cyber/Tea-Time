@@ -17,13 +17,13 @@ class Bush(BasicSprite):
         self.alive = True
 
         # drops
-        print(self.name)
         self.num_drops = randint(0, WILD_HERBS[self.name])
         self.drop_surf = self.get_drop_surf()
-        
+        self.drop_sprites = pygame.sprite.Group()
+
         if self.herb != 'basil':
             self.drop_positions = WILD_HERBS_POS[self.name]
-            self.drop_sprites = pygame.sprite.Group()
+            
 
         self.add_bush_items()
 
@@ -56,7 +56,7 @@ class Bush(BasicSprite):
             herb = 'lavender'
         
         self.herb = herb
-        drop_surf = pygame.transform.scale(pygame.image.load(f'assets/images/overlays/{herb}.png'), IMG_SIZE)
+        drop_surf = pygame.transform.scale(pygame.image.load(f'assets/images/overlays/{herb}.png'), DROP_SIZE)
         return drop_surf
     
 
@@ -84,7 +84,6 @@ class Bush(BasicSprite):
                     drop.kill()
 
         else:
-            # TODO: maybe make custom particle effect for basil since no 'drops' given (?) 
             ParticleEffect(
                 pos = self.rect.topleft,
                 surf = self.image,

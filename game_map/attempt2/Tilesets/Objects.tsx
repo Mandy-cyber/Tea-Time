@@ -16,4 +16,7 @@
  <tile id="9">
   <image width="52" height="63" source="../assets/mushroom3.png"/>
  </tile>
+ <tile id="10">
+  <image width="64" height="64" source="../assets/shopkeeper.png"/>
+ </tile>
 </tileset>

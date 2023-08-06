@@ -7,7 +7,7 @@ from random import choice
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, pos, group, collision_sprites, tree_bush_sprites, interaction_sprites, soil_layer):
+    def __init__(self, pos, group, collision_sprites, tree_bush_sprites, interaction_sprites, soil_layer, shop):
         super().__init__(group)
 
         # character images and animation assets
@@ -94,6 +94,9 @@ class Player(pygame.sprite.Sprite):
             'journal': 0
         }
 
+        # shop
+        self.shop = shop
+
 
 
     def load_assets(self):
@@ -129,11 +132,13 @@ class Player(pygame.sprite.Sprite):
         if self.herb_inventory[self.current_herb] > 0:
             self.soil_layer.plant_herb(self.target_pos, self.current_herb)
             self.herb_inventory[self.current_herb] -= 1
+            self.hearts += 3
 
 
     def use_item(self):
         if self.current_item == 'journal':
             print(choice(AFFIRMATIONS))
+            self.hearts += 5
 
 
     def input(self):
@@ -205,16 +210,23 @@ class Player(pygame.sprite.Sprite):
                 self.direction = pygame.math.Vector2()
                 self.state_index = 0
 
-            
-            # INTERACTIONS
+            # INTERACTION INPUT
+            #--------------------
+            if keys[pygame.K_RETURN]:
+                self.check_interaction()
 
 
-    def check_home(self):
+    def check_interaction(self):
         interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites, dokill=False)
         if interaction_sprite:
+            # at home
             if interaction_sprite[0].name == 'WelcomeMat':
                 self.player_state = 'up_idle'
                 self.sleeping = True
+            
+            # at shop
+            elif interaction_sprite[0].name == 'ShopKeeper':
+                self.shop()
 
 
     def get_target_pos(self):
@@ -309,7 +321,6 @@ class Player(pygame.sprite.Sprite):
         self.update_timers()
         self.get_target_pos()
         self.move(dt)
-        self.check_home()
         self.animate(dt)
 
 
