@@ -1,3 +1,4 @@
+import pygame
 from game_code.sprites.basic_sprite import BasicSprite
 from game_code.constants import *
 

@@ -9,7 +9,7 @@ class BasicSprite(pygame.sprite.Sprite):
         self.image = surface
         self.rect = self.image.get_rect(topleft = pos)
         self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.2, -self.rect.height * 0.2)
-        self._layer = layer
+        self.z = layer
 
 
 

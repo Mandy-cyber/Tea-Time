@@ -17,7 +17,7 @@ class Camera(pygame.sprite.Group):
 		# draw layers in correct order
 		for layer_idx in LAYERS.values():
 			for sprite in self.sprites():
-				if sprite._layer == layer_idx:
+				if sprite.z == layer_idx:
 					offset_rect = sprite.rect.copy()
 					offset_rect.center -= self.offset
 					self.display_surface.blit(sprite.image, offset_rect)

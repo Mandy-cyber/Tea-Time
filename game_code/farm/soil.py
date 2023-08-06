@@ -27,7 +27,7 @@ class SoilLayer:
 
         # assets
         self.soil_surfs = Utils.folder_to_surf_dict('assets/images/soil')
-        self.water_surfs = Utils.folder_to_surf_list('assets/graphics/wet_soil')
+        self.water_surfs = Utils.folder_to_surf_list('assets/images/wet_soil')
 
         self.create_soil_grid()
         self.generate_hitboxes()
@@ -62,7 +62,7 @@ class SoilLayer:
 
                 if 'F' in grid_spot:
                     grid_spot.append('X')
-                    self.create_soil_tiles()
+                    self.gen_soil_tiles()
                     if self.raining:
                         self.water_all()
 
@@ -88,7 +88,11 @@ class SoilLayer:
                     cell.append('W')
                     x = x_idx * TILESIZE
                     y = y_idx * TILESIZE
-                    WaterTile((x, y), choice(self.water_surfs), [self.all_sprites, self.water_sprites])
+                    WaterTile(
+                        (x, y), 
+                        pygame.transform.scale(choice(self.water_surfs), IMG_SIZE), 
+                        [self.all_sprites, self.water_sprites]
+                    )
 
 
     def clear_water(self):
@@ -173,6 +177,6 @@ class SoilLayer:
 
                     Soil(
                         pos = (x_idx * TILESIZE, y_idx * TILESIZE), 
-                        surf = self.soil_surfs[tile_type], 
+                        surf = pygame.transform.scale(self.soil_surfs[tile_type + ".PNG"], IMG_SIZE), 
                         groups = [self.all_sprites, self.soil_sprites]
                     )

@@ -6,7 +6,7 @@ from game_code.utils.game_timer import GameTimer
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, pos, group, collision_sprites, tree_bush_sprites, interaction_sprites):
+    def __init__(self, pos, group, collision_sprites, tree_bush_sprites, interaction_sprites, soil_layer):
         super().__init__(group)
 
         # character images and animation assets
@@ -17,7 +17,7 @@ class Player(pygame.sprite.Sprite):
         # general
         self.image = self.animations[self.player_state][self.state_index]
         self.rect = self.image.get_rect(center = pos)
-        self._layer = LAYERS['player']
+        self.z = LAYERS['player']
         self.sleeping = False
 
         # movement
@@ -30,6 +30,7 @@ class Player(pygame.sprite.Sprite):
         self.hitbox = self.rect.copy().inflate((-126, -70))
         self.tree_bush_sprites = tree_bush_sprites
         self.interaction_sprites = interaction_sprites
+        self.soil_layer = soil_layer
 
         # tools
         self.tools = ['shears', 'hoe', 'water']
@@ -74,10 +75,10 @@ class Player(pygame.sprite.Sprite):
         }
 
         self.herb_inventory = {
-            'lavender': 0,
-            'chamomile': 0,
-            'hibiscus': 0,
-            'basil': 0
+            'lavender': 10,
+            'chamomile': 10,
+            'hibiscus': 10,
+            'basil': 10
         }
 
         self.tea_inventory = {
@@ -87,7 +88,7 @@ class Player(pygame.sprite.Sprite):
             'basil_tea': 0
         }
 
-        self.misc_inventory = {
+        self.item_inventory = {
             'glass_bottle': 0,
             'journal': 0
         }
@@ -111,11 +112,22 @@ class Player(pygame.sprite.Sprite):
 
 
     def use_tool(self):
-        pass
+        if self.current_tool == 'hoe':
+            self.soil_layer.hit_soil(self.target_pos)
+
+        elif self.current_tool == 'shears':
+            for bush in self.tree_bush_sprites.sprites():
+                if bush.rect.collidepoint(self.target_pos):
+                    bush.damage()
+
+        elif self.current_tool == 'water':
+            self.soil_layer.water_soil(self.target_pos)
 
 
     def plant_herb(self):
-        pass
+        if self.herb_inventory[self.current_herb] > 0:
+            self.soil_layer.plant_herb(self.target_pos, self.current_herb)
+            self.herb_inventory[self.current_herb] -= 1
 
 
     def use_item(self):
@@ -125,51 +137,68 @@ class Player(pygame.sprite.Sprite):
     def input(self):
         keys = pygame.key.get_pressed()
 
-        # MOVEMENT INPUT
-        #----------------------
-        # vertical
-        if keys[pygame.K_UP] or keys[pygame.K_w]:
-            self.direction.y = -1
-            self.player_state = 'up'
-        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
-            self.direction.y = 1
-            self.player_state = 'down'
-        else:
-            self.direction.y = 0
+        if not self.timers['use_tool'].active and not self.sleeping:
 
-        # horizontal
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.direction.x = -1
-            self.player_state = 'left'
-        elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.direction.x = 1
-            self.player_state = 'right'
-        else:
-            self.direction.x = 0
+            # MOVEMENT INPUT
+            #----------------------
+            # vertical
+            if keys[pygame.K_UP] or keys[pygame.K_w]:
+                self.direction.y = -1
+                self.player_state = 'up'
+            elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                self.direction.y = 1
+                self.player_state = 'down'
+            else:
+                self.direction.y = 0
+
+            # horizontal
+            if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                self.direction.x = -1
+                self.player_state = 'left'
+            elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                self.direction.x = 1
+                self.player_state = 'right'
+            else:
+                self.direction.x = 0
 
 
-        # TOOL INPUT
-        #----------------------
-        # change tool
-        if keys[pygame.K_t]:
-            self.timers['change_tool'].activate()
-            self.change_tool()
+            # TOOL INPUT
+            #----------------------
+            # change tool
+            if keys[pygame.K_1]:
+                self.timers['change_tool'].activate()
+                self.change_tool()
 
-        
-        # HERB INPUT
-        #----------------------
-        # change herb
-        if keys[pygame.K_q]:
-            self.timers['change_herb'].activate()
-            self.change_herb()
+            # use tool
+            elif keys[pygame.K_t]:
+                self.timers['use_tool'].activate()
+                self.direction = pygame.math.Vector2()
+                self.state_index = 0
 
-        
-        # ITEM INPUT (e.g. bottle)
-        #--------------------------
-        if keys[pygame.K_l]:
-            self.timers['change_item'].activate()
-            self.change_item()
+            
+            # HERB INPUT
+            #----------------------
+            # change herb
+            if keys[pygame.K_2]:
+                self.timers['change_herb'].activate()
+                self.change_herb()
 
+            # plant herb
+            elif keys[pygame.K_q]:
+                self.timers['use_herb'].activate()
+                self.direction = pygame.math.Vector2()
+                self.state_index = 0
+
+            
+            # ITEM INPUT (e.g. bottle)
+            #--------------------------
+            if keys[pygame.K_l]:
+                self.timers['change_item'].activate()
+                self.change_item()
+
+
+    def get_target_pos(self):
+        self.target_pos = self.rect.center + TOOL_OFFSET[self.player_state.split('_')[0]]
 
 
     def change_tool(self):
@@ -202,6 +231,10 @@ class Player(pygame.sprite.Sprite):
         if self.direction.magnitude() == 0:
             self.player_state = self.player_state.split('_')[0] + '_idle'
 
+        # tool use
+        if self.timers['use_tool'].active:
+            self.player_state = self.player_state.split('_')[0] + '_' + self.current_tool
+
 
     def move(self, dt):
         # normalizing so diagonals aren't faster moving than other directions
@@ -221,8 +254,18 @@ class Player(pygame.sprite.Sprite):
         # self.collide('v')
 
 
+    def update_timers(self):
+        for timer in self.timers.values():
+            timer.update()
+
+
     def update(self, dt):
         self.input()
         self.change_player_state()
+        self.update_timers()
+        self.get_target_pos()
         self.move(dt)
         self.animate(dt)
+
+
+

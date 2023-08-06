@@ -20,7 +20,8 @@ class GameTimer:
     
     def update(self):
         """update timer until time to end"""
-        if (pygame.time.get_ticks() - self.start_time) >= self.duration:
+        current_time = pygame.time.get_ticks() 
+        if current_time - self.start_time >= self.duration:
             if self.end_func != None and self.start_time != 0:
                 self.end_func()
                 

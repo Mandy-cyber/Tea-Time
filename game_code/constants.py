@@ -64,7 +64,7 @@ LAYERS = {
     'soil': 2,
     'water_patch': 3,
     'ground rain': 4,
-    'small_plant': 5,
+    'herb_plant': 5,
     'player': 6,
     'buildings': 7,
     'bush_herbs': 8,
