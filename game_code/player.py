@@ -2,6 +2,7 @@ import pygame
 from game_code.constants import *
 from game_code.utils.utils import Utils
 from game_code.utils.game_timer import GameTimer
+from random import choice
 
 
 class Player(pygame.sprite.Sprite):
@@ -131,7 +132,8 @@ class Player(pygame.sprite.Sprite):
 
 
     def use_item(self):
-        pass
+        if self.current_item == 'journal':
+            print(choice(AFFIRMATIONS))
 
 
     def input(self):
@@ -192,9 +194,16 @@ class Player(pygame.sprite.Sprite):
             
             # ITEM INPUT (e.g. bottle)
             #--------------------------
-            if keys[pygame.K_l]:
+            # change item
+            if keys[pygame.K_3]:
                 self.timers['change_item'].activate()
                 self.change_item()
+
+            # use item
+            if keys[pygame.K_l]:
+                self.timers['use_item'].activate()
+                self.direction = pygame.math.Vector2()
+                self.state_index = 0
 
 
     def get_target_pos(self):

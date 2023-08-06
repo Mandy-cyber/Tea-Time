@@ -13,7 +13,7 @@ from game_code.sprites.wild_plant import WildPlant
 from game_code.sprites.bush import Bush
 from game_code.sprites.overlay import Overlay
 from game_code.player import Player
-
+from game_code.weather import *
 
 class Game:
 
@@ -33,8 +33,10 @@ class Game:
         self.overlayer = Overlay(self.player)
 
         # weather
-        self.raining = randint(0, 10) > 6
+        self.rain = Rain(self.all_sprites)
+        self.raining = randint(0, 10) > 2
         self.soil_layer.raining = self.raining
+        self.sky = Sky()
 
 
     def load_map(self):
@@ -109,7 +111,7 @@ class Game:
         )
             
 
-    def herb_collisions(self):
+    def wild_plant_collisions(self):
         if self.soil_layer.herb_sprites:
             for herb in self.soil_layer.herb_sprites.sprites():
                 if herb.harvestable and herb.rect.colliderect(self.player.hitbox):
@@ -128,6 +130,8 @@ class Game:
     
     def update_inventory_func(self, item):
         self.player.full_inventory[item] += 1
+        if item in self.player.herb_inventory.keys(): self.player.herb_inventory[item] += 1
+        if item in self.player.item_inventory.keys(): self.player.item_inventory[item] += 1
 
 
     def restart_day(self):
@@ -136,7 +140,7 @@ class Game:
         self.soil_layer.clear_water()
 
         # rain
-        self.raining = randint(0, 10) > 7
+        self.raining = randint(0, 10) > 2
         self.soil_layer.raining = self.raining
         if self.raining:
             self.soil_layer.water_all()
@@ -151,7 +155,8 @@ class Game:
             # add new drops
             bush.add_bush_items()
 
-        # TODO: add sky stuff in here
+        # sky
+        self.sky.day = [255, 255, 255]
 
 
     def run(self, dt):
@@ -162,8 +167,13 @@ class Game:
         self.all_sprites.custom_draw(self.player)
 
         self.all_sprites.update(dt)
-        self.herb_collisions()
+        self.wild_plant_collisions()
 
         self.overlayer.display()
 
+        # rain
+        if self.raining: self.rain.update()
+        
+        # day/night cycle
+        self.sky.display(dt)
 

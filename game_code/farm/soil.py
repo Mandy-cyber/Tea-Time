@@ -76,7 +76,7 @@ class SoilLayer:
                 
                 WaterTile(
                     pos = soil_sprite.rect.topleft,
-                    surf = choice(self.water_surfs),
+                    surf = pygame.transform.scale(choice(self.water_surfs), IMG_SIZE),
                     groups = [self.all_sprites, self.water_sprites]
                 )
 

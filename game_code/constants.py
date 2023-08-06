@@ -1,4 +1,5 @@
 from pygame.math import Vector2
+from random import randint
 
 # GENERAL
 #----------------------
@@ -6,6 +7,17 @@ SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 800
 TILESIZE = 64
 IMG_SIZE = (256,256)
+
+
+
+# AFFIRMATIONS
+#----------------------
+AFFIRMATIONS = [
+    'affirmation one',
+    'affirmation two',
+    'affirmation three'
+]
+
 
 
 # SPEEDS
@@ -63,7 +75,7 @@ LAYERS = {
     'earth': 1,
     'soil': 2,
     'water_patch': 3,
-    'ground rain': 4,
+    'ground_rain': 4,
     'herb_plant': 5,
     'player': 6,
     'buildings': 7,
