@@ -108,7 +108,7 @@ class Player(pygame.sprite.Sprite):
         for animation_name in self.animations.keys():
             animation_path = 'assets/images/player/' + animation_name
             image_surfs = Utils.folder_to_surf_list(animation_path)
-            scaled_image_surfs = [pygame.transform.scale(image, IMG_SIZE) for image in image_surfs]
+            scaled_image_surfs = [pygame.transform.scale(image, (80, 80)) for image in image_surfs]
             self.animations[animation_name] = scaled_image_surfs
 
 
@@ -167,7 +167,7 @@ class Player(pygame.sprite.Sprite):
             # TOOL INPUT
             #----------------------
             # change tool
-            if keys[pygame.K_1]:
+            if keys[pygame.K_1] and not self.timers['change_tool'].active:
                 self.timers['change_tool'].activate()
                 self.change_tool()
 
@@ -181,7 +181,7 @@ class Player(pygame.sprite.Sprite):
             # HERB INPUT
             #----------------------
             # change herb
-            if keys[pygame.K_2]:
+            if keys[pygame.K_2] and not self.timers['change_herb'].active:
                 self.timers['change_herb'].activate()
                 self.change_herb()
 
@@ -195,7 +195,7 @@ class Player(pygame.sprite.Sprite):
             # ITEM INPUT (e.g. bottle)
             #--------------------------
             # change item
-            if keys[pygame.K_3]:
+            if keys[pygame.K_3] and not self.timers['change_item'].active:
                 self.timers['change_item'].activate()
                 self.change_item()
 
@@ -204,6 +204,17 @@ class Player(pygame.sprite.Sprite):
                 self.timers['use_item'].activate()
                 self.direction = pygame.math.Vector2()
                 self.state_index = 0
+
+            
+            # INTERACTIONS
+
+
+    def check_home(self):
+        interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites, dokill=False)
+        if interaction_sprite:
+            if interaction_sprite[0].name == 'WelcomeMat':
+                self.player_state = 'up_idle'
+                self.sleeping = True
 
 
     def get_target_pos(self):
@@ -245,6 +256,30 @@ class Player(pygame.sprite.Sprite):
             self.player_state = self.player_state.split('_')[0] + '_' + self.current_tool
 
 
+    def collide(self, direction):
+        for sprite in self.collision_sprites.sprites():
+            if hasattr(sprite, 'hitbox'):
+                if sprite.hitbox.colliderect(self.hitbox):
+                    # HORIZONTAL COLLISION
+                    if direction == 'h':
+                        if self.direction.x > 0: # moving right
+                            self.hitbox.right = sprite.hitbox.left
+                        elif self.direction.x < 0: # moving left
+                            self.hitbox.left = sprite.hitbox.right
+                        self.rect.centerx = self.hitbox.centerx
+                        self.pos.x = self.hitbox.centerx
+
+                    # VERTICAL COLLISION
+                    if direction == 'v':
+                        if self.direction.y > 0: # moving down
+                            self.hitbox.bottom = sprite.hitbox.top
+                        elif self.direction.y < 0: # moving up
+                            self.hitbox.top = sprite.hitbox.bottom
+                        self.rect.centery = self.hitbox.centery
+                        self.pos.y = self.hitbox.centery
+
+
+
     def move(self, dt):
         # normalizing so diagonals aren't faster moving than other directions
         if self.direction.magnitude() > 0: # can't normalize vector of length lte 0
@@ -254,13 +289,13 @@ class Player(pygame.sprite.Sprite):
         self.pos.x += self.direction.x * self.speed * dt
         self.hitbox.centerx = round(self.pos.x)
         self.rect.centerx = self.hitbox.centerx
-        # self.collide('h)
+        self.collide('h')
 
         # vertical movement
         self.pos.y += self.direction.y * self.speed * dt
         self.hitbox.centery = round(self.pos.y)
         self.rect.centery = self.hitbox.centery
-        # self.collide('v')
+        self.collide('v')
 
 
     def update_timers(self):
@@ -274,6 +309,7 @@ class Player(pygame.sprite.Sprite):
         self.update_timers()
         self.get_target_pos()
         self.move(dt)
+        self.check_home()
         self.animate(dt)
 
 

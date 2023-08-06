@@ -40,11 +40,7 @@ class Game:
 
 
     def load_map(self):
-        tmx = load_pygame('game_map/map.tmx')
-
-        # buildings layer
-        for obj in tmx.get_layer_by_name('Buildings'):
-            BasicSprite((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites])
+        tmx = load_pygame('game_map/attempt2/map.tmx')
 
         # water layer
         water_animations = Utils.folder_to_surf_list('assets/images/water')
@@ -52,21 +48,22 @@ class Game:
             Water((x * TILESIZE, y * TILESIZE), water_animations, self.all_sprites)
 
         # wild plants
-        for x, y, surf in tmx.get_layer_by_name('WildPlants').tiles():
-            WildPlant((x * TILESIZE, y * TILESIZE), surf, [self.all_sprites, self.collision_sprites])
+        for obj in tmx.get_layer_by_name('Wildlife'):
+            WildPlant((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites])
 
-        # bushes and trees
-        for obj in tmx.get_layer_by_name('Trees'):
-            if obj.name == None: # aka regular background trees
-                BasicSprite((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites])
-            else: # actually useful trees and bushes
-                Bush(
-                    pos = (obj.x, obj.y),
-                    surf = obj.image,
-                    groups = [self.all_sprites, self.collision_sprites, self.tree_bush_sprites],
-                    name = obj.name,
-                    update_inventory_func = self.update_inventory_func
-                )
+        # harvestable bushes and trees
+        for obj in tmx.get_layer_by_name('HarvestableWildlife'):
+            Bush(
+                pos = (obj.x, obj.y),
+                surf = obj.image,
+                groups = [self.all_sprites, self.collision_sprites, self.tree_bush_sprites],
+                name = obj.name,
+                update_inventory_func = self.update_inventory_func
+            )
+        
+        # regular trees
+        for obj in tmx.get_layer_by_name('Forrest'):
+            BasicSprite((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites])
 
         # borders
         for x, y, surf in tmx.get_layer_by_name('Borders').tiles():
@@ -94,7 +91,15 @@ class Game:
 					name = obj.name
 				)
 
-            if obj.name == 'ShopKeeper' or obj.name == 'ShopKeeperTile':
+            if obj.name == 'WelcomeRug':
+                BasicSprite((obj.x, obj.y), obj.image, self.all_sprites)
+
+
+            if obj.name == 'House':
+                BasicSprite((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites])
+
+
+            if obj.name == 'ShopKeeper':
                 Interaction(
 					pos = (obj.x, obj.y),
 					size = (obj.width, obj.height),
@@ -105,7 +110,7 @@ class Game:
         # map 'floor'
         BasicSprite(
             pos = (0, 0),
-            surface = pygame.image.load('game_map/ground.png').convert_alpha(),
+            surface = pygame.image.load('game_map/attempt2/ground.png').convert_alpha(),
             groups = self.all_sprites,
             layer = LAYERS['earth']
         )

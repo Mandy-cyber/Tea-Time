@@ -64,7 +64,7 @@ class Rain:
         self.all_sprites = all_sprites
         self.rain_drops = Utils.folder_to_surf_list('assets/images/rain/drops')
         self.rain_floor = Utils.folder_to_surf_list('assets/images/rain/floor')
-        self.floor_w, self.floor_h = pygame.image.load('game_map/ground.png').get_size()
+        self.floor_w, self.floor_h = pygame.image.load('game_map/attempt2/ground.png').get_size()
 
     
     def create_floor(self):

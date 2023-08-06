@@ -34,11 +34,11 @@ class SoilLayer:
         
 
     def create_soil_grid(self):
-        ground = pygame.image.load('game_map/ground.png')
+        ground = pygame.image.load('game_map/attempt2/ground.png')
         h_tiles, v_tiles = ground.get_width() // TILESIZE, ground.get_height() // TILESIZE
         
         self.grid = [[[] for col in range(h_tiles)] for row in range(v_tiles)]
-        for x, y, __ in load_pygame('game_map/map.tmx').get_layer_by_name('FarmLand').tiles():
+        for x, y, __ in load_pygame('game_map/attempt2/map.tmx').get_layer_by_name('FarmLand').tiles():
             self.grid[y][x].append('F')
 
     

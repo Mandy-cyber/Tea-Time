@@ -11,12 +11,13 @@ class Bush(BasicSprite):
         super().__init__(pos, surf, groups)
 
         self.name = name
-        if self.name == 'FullBasil': self.name = 'BasilBush' # TODO clean this up when i find the bush named Fullbasil lol
+        if self.name == None: self.name = 'ChamomileBush'
 
         self.update_inventory = update_inventory_func
         self.alive = True
 
         # drops
+        print(self.name)
         self.num_drops = randint(0, WILD_HERBS[self.name])
         self.drop_surf = self.get_drop_surf()
         
@@ -47,11 +48,11 @@ class Bush(BasicSprite):
         """gets the correct image for this tree/bush to have on it"""
         if self.name == 'ChamomileBush':
             herb = 'chamomile'
-        elif self.name == 'BasilBush' or self.name == 'FullBasil':
+        elif self.name == 'BasilBush':
             herb = 'basil'
         elif self.name == 'HibiscusTree':
             herb = 'hibiscus'
-        elif self.name == 'Bush':
+        elif self.name == 'LavenderBush':
             herb = 'lavender'
         
         self.herb = herb
@@ -104,7 +105,7 @@ class Bush(BasicSprite):
                 duration = 250
             )
         
-        if self.herb == 'basil': self.image = pygame.image.load('assets/images/wild_plants/basil_bush_empty.png')
+        if self.herb == 'basil': self.image = pygame.transform.scale(pygame.image.load('assets/images/wild_plants/basil_bush_empty.png'), IMG_SIZE)
         self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
         self.hitbox = self.rect.copy().inflate(-10, -self.rect.height * 0.6)
         self.alive = False

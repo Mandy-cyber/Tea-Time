@@ -6,7 +6,7 @@ from random import randint
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 800
 TILESIZE = 64
-IMG_SIZE = (256,256)
+IMG_SIZE = (64,64)
 
 
 
@@ -112,7 +112,7 @@ HERB_DROPS = {
 WILD_HERBS = {
     'HibiscusTree': 3,
     'ChamomileBush': 4,
-    'Bush': 4,
+    'LavenderBush': 4,
     'BasilBush': 5,
 }
 
@@ -120,7 +120,7 @@ WILD_HERBS = {
 WILD_HERBS_POS = {
     'HibiscusTree': [(30, 40), (70, 70), (50, 80), (90, 30)],
     'ChamomileBush': [(10, 10), (30, 30), (50, 10)],
-    'Bush': [(10, 10), (30, 30), (50, 10)]
+    'LavenderBush': [(10, 10), (30, 30), (50, 10)]
 }
 
 
