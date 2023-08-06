@@ -17,7 +17,7 @@ class Sky:
         # changing sky color
         for idx, value in enumerate(self.night):
             if self.day[idx] > value:
-                self.day[idx] -= 2 * dt
+                self.day[idx] -= 0.5 * dt
 
         # displaying change in sky color
         self.full_surf.fill(self.day)
