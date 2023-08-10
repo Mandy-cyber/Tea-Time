@@ -1,17 +1,8 @@
 # Tea-Time
 >  All game assets (drawings) were made by me, Mandy-cyber. Feel free to use them <3
+
 A cozy mental health game submitted for HackUnited hackathon.
 
-
-Detailed written explanation. (Submitted via DevPost)
-    Must include:
-Inspiration
-What it does
-How we built it
-Challenges we ran into
-Accomplishments that we're proud of
-What we learned
-What's next
 
 ## Inspiration
 As someone who has struggled with depression since childhood, HackUnited's theme of 'Mental Health' _deeply_ resonated with me. I knew I wanted to create a truly impactful project but... I didn't know what it should be. At first I thought to do a website, maybe an app, but for this particular theme it seemed a bit overdone. I wanted to create something fun, unique, and just as impactful as a site full of resources and advice. The solution? A game! What better way to calm down, slow down, and regroup your mental health than with a cozy, no-pressure, farming game full of hearts, tea, and affirmations? That's a rhetorical question hehe.
